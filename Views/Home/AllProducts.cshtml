@@ -1,0 +1,38 @@
+<div>
+    <span><a href="/">Categories</a></s></span>
+    <span>Products</s></span>
+    @* add new product *@
+    <div>
+        @model Product
+        <h2>New Product</h2>
+        <form asp-action="ProductAdd" asp-controller="Home" method="post">
+            @* Name *@
+            <span asp-validation-for="Name"></span>
+            <label asp-for="Name">Name:</label>
+            <input type="text" asp-for="Name"></input>
+            @* Description *@
+            <span asp-validation-for="Description"></span>
+            <label asp-for="Description">Description:</label>
+            <input type="text" asp-for="Description"></input>
+            @* Price *@
+            <span asp-validation-for="Price"></span>
+            <label asp-for="Price">Price:</label>
+            <input type="number" asp-for="Price"></input>
+
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    @* show all Products *@
+    <div>
+        <h2>Existing Products</h2>
+           @{
+            foreach (var item in ViewBag.allProducts)
+            {
+                @* put the items catId in the route *@
+               <a href="product/@item.ProductId">@item.Name</a>
+               <br/>
+            }
+        }
+    </div>
+
+</div>

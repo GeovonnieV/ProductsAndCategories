@@ -1,0 +1,32 @@
+<div>
+    <h1>@ViewBag.OneCategory.Name</h1>
+    @* products this category has *@
+    <div>
+        <h3>Products</h3>
+        @{
+            foreach (var item in ViewBag.thisCatsProducts)
+            {
+                <p>@item.Name</p>
+            }
+        }
+    </div>
+    @* add a product to this category *@
+    @model Association
+    <h3>Add Product</h3>
+    <form asp-action="AddProductToCategory" asp-controller="Home" method="POST">
+        <span asp-validation-for="CategoryId"></span>
+        <input type="hidden" asp-for="CategoryId" value="@ViewBag.OneCategory.CategoryId">
+
+        <span asp-validation-for="ProductId"></span>
+        <label for="ProductId">Products:</label>
+        <select name="ProductId" id="">
+            @{
+                foreach (var item in ViewBag.productsUnrelated)
+                {
+                    <option value="@item.ProductId">@item.Name</option>
+                }
+            }
+        </select>
+        <button type="submit">Add</button>
+    </form>
+</div>
