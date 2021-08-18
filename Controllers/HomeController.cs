@@ -67,9 +67,26 @@ namespace ProductsAndCategories.Controllers
         [HttpGet("product/{productId}")]
         public IActionResult OneProduct(int productId)
             {
+                // Get the Specific Product clicked on
                 Product RetrievedProduct = _context.Products
                     .SingleOrDefault(product => product.ProductId == productId);
                 ViewBag.OneProduct = RetrievedProduct;
+
+                // give me all the Categories in this Product
+                ViewBag.thisProdsCats = _context.Categories
+                    .Include(cat => cat.CategoriesProducts)
+                    .Where(cat => cat.CategoriesProducts.Any(c => c.ProductId == productId))
+                    .ToList(); 
+                
+                 // gets the Categories this product does not have in it
+                // Go in Categories
+                ViewBag.categoriesUnrelated = _context.Categories
+                    // include a list of the CategoriesProducts that links the middle table
+                    .Include(cat => cat.CategoriesProducts)
+                    // All the CategoriesProducts that are == to this Products ID
+                    .Where(cat => cat.CategoriesProducts.All(cat => cat.ProductId != productId));
+
+
                 return View();
             }
 
@@ -98,6 +115,15 @@ namespace ProductsAndCategories.Controllers
                 _context.Associations.Add(newProductInCat);
                 _context.SaveChanges();
                 return RedirectToAction("OneCategory");
+            }
+
+        // Adding a Category to our Product
+        [HttpPost("product/{productId}")]
+        public IActionResult AddCaategoryToProduct(Association newCatInProduct)
+            {
+                _context.Associations.Add(newCatInProduct);
+                _context.SaveChanges();
+                return RedirectToAction("OneProduct");
             }
 
     }

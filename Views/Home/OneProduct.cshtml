@@ -3,8 +3,30 @@
     @* Categories this Product has *@
     <div>
         <h3>Categories</h3>
+           @{
+            foreach (var item in ViewBag.thisProdsCats)
+            {
+                <p>@item.Name</p>
+            }
+        }
     </div>
     @* add a Category to this Product *@
+        @model Association
     <h3>Add Category</h3>
-    
+    <form asp-action="AddCaategoryToProduct" asp-controller="Home" method="POST">
+        <span asp-validation-for="ProductId"></span>
+        <input type="hidden" asp-for="ProductId" value="@ViewBag.OneProduct.ProductId">
+
+        <span asp-validation-for="CategoryId"></span>
+        <label for="CategoryId">Products:</label>
+        <select name="CategoryId" id="">
+            @{
+                foreach (var item in ViewBag.categoriesUnrelated)
+                {
+                    <option value="@item.CategoryId">@item.Name</option>
+                }
+            }
+        </select>
+        <button type="submit">Add</button>
+    </form>
 </div>
